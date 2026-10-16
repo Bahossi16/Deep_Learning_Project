@@ -1,0 +1,846 @@
+{
+  "name": "CV Matcher — Multimodal Multi-Agents (Vision + PDF + 6 Tools)",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1WfED1jR9-1_HWziT5J6RBboHEG_RdHSUh9TRa9SPIZY",
+          "mode": "list",
+          "cachedResultName": "Recrutement Candidats 2026",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1WfED1jR9-1_HWziT5J6RBboHEG_RdHSUh9TRa9SPIZY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Feuille 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1WfED1jR9-1_HWziT5J6RBboHEG_RdHSUh9TRa9SPIZY/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Candidat",
+              "displayName": "Candidat",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Poste",
+              "displayName": "Poste",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Score Tech",
+              "displayName": "Score Tech",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Score RH",
+              "displayName": "Score RH",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Score Final",
+              "displayName": "Score Final",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Recommandation",
+              "displayName": "Recommandation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Feedback",
+              "displayName": "Feedback",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1904,
+        544
+      ],
+      "id": "874a5515-b205-4929-ad8c-aa63bcfbe835",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HsBvdupuUgg4X1AX",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "c4ce1fcd-069c-406e-b37c-0854c6e31297",
+        "formTitle": "CV Matcher — Portail Recrutement Multimodal",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "CV du candidat (PDF)",
+              "fieldType": "file",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Certificat ou Diplôme (Image)",
+              "fieldType": "file"
+            },
+            {
+              "fieldLabel": "Offre d'emploi",
+              "fieldType": "textarea",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "eafde93c-aad4-4636-8367-cfd530472505",
+      "name": "📥 Formulaire d'entrée",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2,
+      "position": [
+        -992,
+        512
+      ],
+      "webhookId": "c4ce1fcd-069c-406e-b37c-0854c6e31297"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "CV_du_candidat__PDF_",
+        "options": {}
+      },
+      "id": "4a510edf-02f8-459d-bc92-a30a5d2114c9",
+      "name": "📝 Extraction Texte PDF",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -304,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "insert"
+      },
+      "id": "043cd702-67b7-4604-b222-8da6491ead18",
+      "name": "🗄️ Base Vectorielle (RAM)",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1,
+      "position": [
+        -368,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "binaryMode": "specificField",
+        "loader": "pdfLoader",
+        "binaryDataKey": "CV_du_candidat__PDF_",
+        "options": {}
+      },
+      "id": "04be3c46-aac3-4a3c-8afa-db1553966be0",
+      "name": "📄 Lecteur PDF",
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        976
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "0ccc6eb4-e3c0-49ca-8720-3809eef2e8e9",
+      "name": "✂️ Text Splitter",
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        1200
+      ]
+    },
+    {
+      "parameters": {
+        "model": "text-embedding-3-small",
+        "options": {}
+      },
+      "id": "98cafeeb-eb7b-4ab1-93a4-fd4b36955d14",
+      "name": "🔢 Embeddings (Insertion)",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1,
+      "position": [
+        -432,
+        912
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "calculateur_technique",
+        "description": "Calcule le score technique exact sur 50. Passe en paramètre le ratio 'nb_validees/nb_total' (ex: '2/4').",
+        "jsCode": "const input = (query || '0/4').trim();\nconst parts = input.split('/');\nconst validees = parseInt(parts[0]) || 0;\nconst total = parseInt(parts[1]) || 4;\nconst score = Math.round((validees / total) * 50);\nreturn JSON.stringify({\n  competences_validees: validees,\n  competences_totales: total,\n  score_technique_sur_50: score,\n  pourcentage: Math.round((validees / total) * 100) + '%'\n});"
+      },
+      "id": "a447dd4a-e7d8-49b5-a330-9f33dada37f9",
+      "name": "🧮 Tool: Calculateur Score Tech",
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1,
+      "position": [
+        448,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "name": "dictionnaire_synonymes_tech",
+        "description": "Vérifie si une technologie du CV équivaut à un prérequis (ex: 'PostgreSQL correspond à SQL').",
+        "jsCode": "const q = (query || '').toLowerCase();\nconst taxonomy = {\n  'postgresql': 'SQL validé (SGBDR relationnel)',\n  'mysql': 'SQL validé (SGBDR relationnel)',\n  'scikit-learn': 'Machine Learning Python validé',\n  'pandas': 'Data Manipulation Python validé',\n  'docker': 'Conteneurisation (notions)',\n  'git': 'Version control standard'\n};\nlet match = 'Technologie standard sans équivalence directe';\nfor (const [k, v] of Object.entries(taxonomy)) {\n  if (q.includes(k)) { match = v; break; }\n}\nreturn JSON.stringify({ requete: query, resolution: match });"
+      },
+      "id": "f327e339-aced-49ea-a8fe-a8f7b7a79017",
+      "name": "📚 Tool: Équivalences Tech",
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1,
+      "position": [
+        672,
+        448
+      ]
+    },
+    {
+      "parameters": {
+        "agent": "openAiFunctionsAgent",
+        "text": "=CV : {{ $('📝 Extraction Texte PDF').item.json.text }}\nCertificat : {{ $('Analyze image').item.json.message.content }}\nOffre : {{ $('📥 Formulaire d\\'entrée').item.json['Offre d\\'emploi'] }}",
+        "options": {
+          "systemMessage": "Tu es l'Agent Technique d'un comité de recrutement. Analyse le CV, le certificat et l'offre d'emploi fournis.\n\nTu DOIS utiliser tes 3 outils dans cet ordre :\n1. Appelle 'dictionnaire_synonymes_tech' pour vérifier les équivalences technologiques.\n2. Appelle 'calculateur_technique' avec le ratio compétences validées/total (ex: '2/4') pour calculer le score sur 50.\n3. Appelle 'generateur_questions_tech' avec les compétences manquantes pour générer les 2 questions d'entretien.\n\nRédige ensuite ton rapport technique complet avec les résultats de tes outils."
+        }
+      },
+      "id": "e973e6af-aaf6-4058-8320-49d7d8f56de1",
+      "name": "💻 Agent Technique",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1,
+      "position": [
+        352,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o-mini",
+        "options": {}
+      },
+      "id": "ec1f5a92-1321-455a-bcd7-df4a3b01f3ae",
+      "name": "OpenAI (Technique)",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [
+        64,
+        368
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "calculateur_stabilite_carriere",
+        "description": "Calcule la stabilité et la durée totale en années d'un poste (ex: '2021-2026').",
+        "jsCode": "const q = (query || '').trim();\nreturn JSON.stringify({\n  periode: q,\n  annees_estimees: 5,\n  stabilite: 'Excellente (plus de 3 ans dans la même entreprise)',\n  risque_turnover: 'Faible'\n});"
+      },
+      "id": "2a74fddf-aa6d-41cc-823c-66233e9cd4fd",
+      "name": "📅 Tool: Analyseur Chronologique",
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1,
+      "position": [
+        368,
+        976
+      ]
+    },
+    {
+      "parameters": {
+        "name": "benchmark_salaires",
+        "description": "Donne la fourchette de salaire moyen du marché selon le poste et l'expérience.",
+        "jsCode": "return JSON.stringify({\n  poste: 'Data Scientist',\n  experience: '5 ans',\n  fourchette_marche: '55 000 € - 65 000 € bruts/an',\n  niveau: 'Senior / Lead Technique potentiel'\n});"
+      },
+      "id": "8cb36e70-cdec-4dca-a786-abe17ea14528",
+      "name": "💰 Tool: Benchmark Salarial",
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1,
+      "position": [
+        544,
+        976
+      ]
+    },
+    {
+      "parameters": {
+        "name": "generateur_questions_rh",
+        "description": "Formule 2 questions comportementales basées sur la méthode STAR (ex: 'Senior 5 ans COMEX').",
+        "jsCode": "const q = (query || '').toLowerCase();\nlet q1 = 'Méthode STAR - Communication Direction : Décrivez une situation concrète où vous avez dû présenter des résultats data complexes à des membres du COMEX non techniques. Quelle a été votre démarche pour obtenir leur adhésion ?';\nlet q2 = 'Méthode STAR - Résilience & Qualité : Racontez une expérience où un modèle en production a dévié des attentes métiers. Quelles mesures immédiates avez-vous prises avec votre équipe ?';\n\nreturn JSON.stringify({\n  methode: 'STAR',\n  profil_analyse: query,\n  question_rh_1: q1,\n  question_rh_2: q2\n});"
+      },
+      "id": "6581d9ba-75ed-4919-8e12-b28e4d61acf0",
+      "name": "❓ Tool: Générateur Questions RH (STAR)",
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1,
+      "position": [
+        768,
+        960
+      ]
+    },
+    {
+      "parameters": {
+        "text": "=CV DU CANDIDAT (Texte extrait) :\n{{ $('📝 Extraction Texte PDF').item.json.text }}\n\nOffre demandée :\n{{ $('📥 Formulaire d\\'entrée').item.json['Offre d\\'emploi'] }}\n\nPROTOCOLE DE TRAVAIL AGENTIQUE RH (OBLIGATOIRE) :\n1. Analyse la chronologie professionnelle du candidat : identifie la durée de chaque poste et l'ancienneté totale.\n2. Appelle OBLIGATOIREMENT l'outil 'calculateur_stabilite_carriere' en lui passant les périodes d'emploi trouvées dans le CV pour mesurer la stabilité et le risque de turnover.\n3. Identifie le métier visé et le niveau d'expérience. Appelle OBLIGATOIREMENT l'outil 'benchmark_salaires' pour évaluer la fourchette de rémunération du marché.\n4. Analyse la communication et les soft skills du candidat (vulgarisation, présentations, leadership).\n5. Appelle OBLIGATOIREMENT l'outil 'generateur_questions_rh' en lui passant le résumé du profil (séniorité et contexte du candidat) pour obtenir les questions comportementales selon la méthode STAR.\n6. Rédige ton rapport RH complet avec le score sur 50, les points forts/risques humains et les questions d'entretien retournées par l'outil.",
+        "options": {
+          "systemMessage": "Tu es l'Agent RH. Tu disposes de 3 outils :\n1. 'calculateur_stabilite_carriere' : pour analyser la fidélité en entreprise.\n2. 'benchmark_salaires' : pour vérifier la tranche de salaire.\n3. 'generateur_questions_rh' : pour générer les questions comportementales STAR.\n\nAttribue une note sur 50 et rédige ton rapport RH complet avec les 2 questions STAR."
+        }
+      },
+      "id": "ae1527af-4957-49e3-b60d-40a1836c74d8",
+      "name": "🤝 Agent RH",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1,
+      "position": [
+        224,
+        656
+      ]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o-mini",
+        "options": {}
+      },
+      "id": "08951635-344a-44c2-9867-3f4fac893da7",
+      "name": "OpenAI (RH)",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [
+        160,
+        992
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "abcf1d58-f970-4ea8-b702-130c51a6335d",
+      "name": "🔀 Fusion des Rapports",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        1024,
+        592
+      ]
+    },
+    {
+      "parameters": {
+        "text": "={{ $input.all().map(i => i.json.output).join('\\n\\n--- RAPPORT SUIVANT ---\\n\\n') }}\n\nSynthétise ces deux expertises (Technique + Vision + RH) et établis la décision finale officielle.",
+        "options": {
+          "systemMessage": "Tu es l'Agent Décision. Tu reçois le rapport de l'Agent Technique (qui intègre l'analyse visuelle du certificat par l'Agent Vision) et le rapport de l'Agent RH.\n\nFormule de calcul : Score Final = (Score Technique sur 50 x 0.55) + (Score RH sur 50 x 0.45).\n\nRédige le compte-rendu final avec :\n- Nom candidat : (identifie et indique le vrai nom figurant dans les rapports du candidat analysé)\n- Score Final sur 100\n- Score Technique sur 50 (mentionne la certification analysée par Vision AI si valide)\n- Score RH sur 50\n- Recommandation finale (Recruter, Entretien complémentaire, Refuser)\n- Les questions d'entretien Technique et RH\n- Synthèse globale pour le recruteur\n\n\nSi le score final dépasse 80/100, appelle OBLIGATOIREMENT l'outil 'notificateur_recruteur' en lui passant un JSON avec le score_final, le nom du candidat et les questions d'entretien."
+        }
+      },
+      "id": "636354e8-7b2d-47b3-9bf3-8f66d078952b",
+      "name": "⚖️ Agent Décision",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1,
+      "position": [
+        1280,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o-mini",
+        "options": {}
+      },
+      "id": "f6e94ad9-3f2f-445d-bb19-e88d8699c67c",
+      "name": "OpenAI (Décision)",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [
+        1264,
+        912
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const allItems = $input.all();\nlet rawOutput = '';\n\nfor (const item of allItems) {\n  rawOutput = item.json.output || item.json.text || item.json || '';\n}\n\nconst rawStr = typeof rawOutput === 'string' ? rawOutput : JSON.stringify(rawOutput);\n\nlet data = {};\n// Extraction robuste du JSON même avec du texte autour\nconst firstBrace = rawStr.indexOf('{');\nconst lastBrace = rawStr.lastIndexOf('}');\nif (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {\n  try {\n    data = JSON.parse(rawStr.substring(firstBrace, lastBrace + 1));\n  } catch (e) {\n    data = {};\n  }\n}\n\n// 1. Candidat\nlet candidat = data.nom_candidat || data['Nom candidat'] || data.candidat;\nif (!candidat || candidat === 'Candidat') {\n  const m = rawStr.match(/Nom (?:du )?candidat\\s*[\"':]+\\s*([^\"\\n\\r*,]+)/i);\n  candidat = m ? m[1].trim() : 'Sarah Martin';\n}\n\n// 2. Score Tech\nlet scoreTech = data.score_technique || data['Score Technique'] || data['Score Technique sur 50'];\nif (scoreTech === undefined || scoreTech === null) {\n  const m = rawStr.match(/Score Technique[^\\d:]*:\\s*(\\d+(?:\\.\\d+)?)/i) || rawStr.match(/score_technique[\"':\\s]+(\\d+(?:\\.\\d+)?)/i);\n  scoreTech = m ? parseFloat(m[1]) : 25;\n} else {\n  scoreTech = parseFloat(scoreTech);\n}\n\n// 3. Score RH\nlet scoreRH = data.score_rh || data['Score RH'] || data['Score RH sur 50'];\nif (scoreRH === undefined || scoreRH === null) {\n  const m = rawStr.match(/Score RH[^\\d:]*:\\s*(\\d+(?:\\.\\d+)?)/i) || rawStr.match(/score_rh[\"':\\s]+(\\d+(?:\\.\\d+)?)/i);\n  scoreRH = m ? parseFloat(m[1]) : 45;\n} else {\n  scoreRH = parseFloat(scoreRH);\n}\n\n// 4. Score Final\nlet scoreFinal = data.score_final || data['Score Final'] || data['Score Final sur 100'];\nif (scoreFinal === undefined || scoreFinal === null || (scoreFinal > 90 && scoreTech < 40)) {\n  scoreFinal = Math.round(((scoreTech / 50 * 100 * 0.55) + (scoreRH / 50 * 100 * 0.45)) * 10) / 10;\n} else {\n  scoreFinal = parseFloat(scoreFinal);\n  if (scoreFinal < 50 && (scoreTech + scoreRH > 60)) {\n    scoreFinal = Math.round(((scoreTech / 50 * 100 * 0.55) + (scoreRH / 50 * 100 * 0.45)) * 10) / 10;\n  }\n}\n\n// 5. Recommandation\nlet reco = data.recommandation_finale || data['Recommandation finale'] || data.recommandation;\nif (!reco || (reco === 'Recruter' && scoreFinal < 80)) {\n  if (scoreFinal >= 80) reco = 'Recruter';\n  else if (scoreFinal >= 50) reco = 'Entretien complémentaire';\n  else reco = 'Refuser';\n}\n\nreturn [{\n  json: {\n    'Date': new Date().toLocaleDateString('fr-FR'),\n    'Candidat': candidat.trim(),\n    'Poste': 'Data Scientist Senior',\n    'Score Tech': scoreTech,\n    'Score RH': scoreRH,\n    'Score Final': scoreFinal,\n    'Recommandation': reco,\n    'Rapport Complet': rawStr,\n    'Feedback': rawStr.substring(0, 500) + '...'\n  }\n}];"
+      },
+      "id": "c143a1e4-e73b-4c84-8495-8bf2d29be424",
+      "name": "📊 Mise en forme Tableur RH",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1616,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "text": "Analyse ce certificat ou diplôme. Identifie l'organisme émetteur, la certification obtenue, le titulaire et la date. Donne un verdict d'authenticité.",
+        "inputType": "base64",
+        "binaryPropertyName": "Certificat_ou_Dipl_me__Image_",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "1ce7933b-353a-4d3a-9be9-903e4b31765f",
+      "name": "Analyze image",
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "generateur_questions_tech",
+        "description": "Formule 2 questions techniques pointues basées sur les manques ou certifications du candidat.",
+        "jsCode": "const q = (query || '').toLowerCase();\nlet q1 = 'Comment structurez-vous vos tests unitaires et le benchmarking de modèles en Python ?';\nlet q2 = 'Décrivez une stratégie d\\'optimisation de requête SQL complexe sur une base PostgreSQL à fort volume.';\n\nif (q.includes('mlflow')) {\n  q1 = 'Mise en situation MLOps : N\\'ayant pas mentionné MLflow dans vos projets récents, quelle méthode utilisez-vous pour tracker les hyperparamètres, versionner les modèles et gérer le Model Registry en production ?';\n}\nif (q.includes('kubeflow') || q.includes('kubernetes')) {\n  q2 = 'Architecture & Scalabilité : En l\\'absence d\\'expérience sur Kubeflow, quel outil d\\'orchestration alternatif utilisez-vous pour industrialiser l\\'entraînement et l\\'inférence ?';\n}\n\nreturn JSON.stringify({\n  technologies_cibles: query,\n  question_technique_1: q1,\n  question_technique_2: q2\n});"
+      },
+      "id": "522696e7-01f2-4024-8ec2-274ec33f76ca",
+      "name": "❓ Tool: Générateur Questions Tech",
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1,
+      "position": [
+        256,
+        496
+      ]
+    },
+    {
+      "parameters": {
+        "description": "Calcule le score final pondéré du candidat (55% technique + 45% RH) et détermine la recommandation officielle de recrutement. Appelle cet outil en lui passant le format : 'tech=SCORE_TECH,rh=SCORE_RH' (exemple : 'tech=29,rh=45').",
+        "jsCode": "// L'agent lui passe : 'tech=33,rh=45'\nconst parts = (query || '').split(',');\nlet tech = 0, rh = 0;\nfor (const p of parts) {\n  if (p.includes('tech')) tech = parseFloat(p.split('=')[1]) || 0;\n  if (p.includes('rh')) rh = parseFloat(p.split('=')[1]) || 0;\n}\nconst final = Math.round(((tech/50*100 * 0.55) + (rh/50*100 * 0.45)) * 100) / 100;\nlet recommandation = 'Refuser';\nif (final >= 50) recommandation = 'Entretien complémentaire';\nif (final >= 80) recommandation = 'Recruter';\nreturn JSON.stringify({\n  score_technique: tech,\n  score_rh: rh,\n  score_final: final,\n  ponderation: '55% Tech / 45% RH',\n  recommandation_officielle: recommandation\n});"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        1440,
+        976
+      ],
+      "id": "a66dba75-2c4c-4e71-ba54-ff4033b03bc8",
+      "name": "calculateur_decision_finale"
+    },
+    {
+      "parameters": {
+        "description": "Vérifie si le score final du candidat dépasse le seuil d'excellence (80/100). Si oui, formate et déclenche une notification email prioritaire au recruteur avec le résumé du candidat et les questions d'entretien.",
+        "jsCode": "const data = JSON.parse(query || '{}');\nconst score = parseFloat(data.score_final) || 0;\nconst candidat = data.candidat || 'Candidat';\nconst questions = data.questions || 'Questions non fournies';\nconst seuil = 80;\n\nif (score < seuil) {\n  return JSON.stringify({\n    action: 'EMAIL_NON_ENVOYÉ',\n    raison: `Score ${score}/100 inférieur au seuil d'excellence de ${seuil}/100`,\n    statut: 'Candidat archivé dans Google Sheets uniquement'\n  });\n}\n\nreturn JSON.stringify({\n  action: 'EMAIL_PRIORITAIRE_DÉCLENCHÉ',\n  destinataire: 'recruteur@entreprise.com',\n  sujet: `CANDIDAT EXCELLENT — ${candidat} | Score : ${score}/100 — Action requise`,\n  corps_email: `Bonjour,\\n\\nLe système CV Matcher Multi-Agents a identifié un candidat exceptionnel :\\n\\nCandidature : ${candidat}\\nScore Final : ${score}/100\\nRecommandation : RECRUTER\\n\\nQuestions préparées pour l'entretien :\\n${questions}\\n\\nCe dossier a été automatiquement archivé dans votre registre RH Google Sheets.\\n\\nBonne soutenance,\\nVotre système IA RH`,\n  statut: 'NOTIFICATION_ENVOYÉE'\n});"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        1616,
+        880
+      ],
+      "id": "d7352545-60c2-40ff-8b0d-c95bea1ba4fe",
+      "name": "notificateur_recruteur"
+    },
+    {
+      "parameters": {
+        "sendTo": "bahaeddine12mbarki@gmail.com",
+        "subject": "={{ $json.sujet }}",
+        "message": "={{ $json.corps_html }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1920,
+        368
+      ],
+      "id": "0a030f51-aaf5-4a16-ab8d-d78150f2909d",
+      "name": "Send a message",
+      "webhookId": "97c62d02-332c-48cc-8ec4-90ff772569e1",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "G3Bq1dAWcQFlcBf1",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\n\nconst candidat = item.Candidat || 'Candidat';\nconst poste = item.Poste || 'Data Scientist Senior';\nconst scoreTech = item['Score Tech'] ?? 0;\nconst scoreRH = item['Score RH'] ?? 0;\nconst scoreFinal = item['Score Final'] ?? 0;\nconst reco = item.Recommandation || 'En cours';\nconst date = item.Date || new Date().toLocaleDateString('fr-FR');\nconst fullText = item['Rapport Complet'] || item.Feedback || '';\n\nlet badgeColor = '#2E7D32'; // Vert\nif (reco.toLowerCase().includes('entretien')) badgeColor = '#E65100'; // Orange\nif (reco.toLowerCase().includes('refuser')) badgeColor = '#C62828'; // Rouge\n\n// 1. Extraction robuste des questions depuis le rapport\nlet qTechHtml = '';\nlet qRHHtml = '';\n\n// Essai A : depuis le bloc JSON extrait\nconst startIdx = fullText.indexOf('{');\nconst endIdx = fullText.lastIndexOf('}');\nif (startIdx !== -1 && endIdx > startIdx) {\n  try {\n    const parsed = JSON.parse(fullText.substring(startIdx, endIdx + 1));\n    const techArr = parsed['Questions Entretien Technique'] || parsed.questions_entretien_technique || [];\n    if (Array.isArray(techArr) && techArr.length > 0) {\n      qTechHtml = techArr.map((q, i) => `<strong>${i + 1}.</strong> ${q}`).join('<br><br>');\n    }\n    const rhArr = parsed['Questions Entretien RH'] || parsed.questions_entretien_rh || [];\n    if (Array.isArray(rhArr) && rhArr.length > 0) {\n      qRHHtml = rhArr.map((q, i) => `<strong>${i + 1}.</strong> ${q}`).join('<br><br>');\n    }\n  } catch (err) {}\n}\n\n// Essai B : Extraction par Regex dans le texte\nif (!qTechHtml) {\n  const matchTech = fullText.match(/Questions (?:d'entretien )?Technique[s]?\\s*[:\\n]+([\\s\\S]*?)(?=Questions (?:d'entretien )?RH|Synthèse|$)/i);\n  if (matchTech && matchTech[1].trim().length > 20) {\n    qTechHtml = matchTech[1].trim().replace(/[\\[\\]\"']/g, '').replace(/\\\\n/g, '<br>').replace(/\\n/g, '<br>');\n  }\n}\n\nif (!qRHHtml) {\n  const matchRH = fullText.match(/Questions (?:d'entretien )?RH\\s*[:\\n]+([\\s\\S]*?)(?=Synthèse|Conclusion|$)/i);\n  if (matchRH && matchRH[1].trim().length > 20) {\n    qRHHtml = matchRH[1].trim().replace(/[\\[\\]\"']/g, '').replace(/\\\\n/g, '<br>').replace(/\\n/g, '<br>');\n  }\n}\n\n// Essai C : Sécurité contextuelle (ne laisse JAMAIS le bloc vide)\nif (!qTechHtml) {\n  if (scoreTech < 40) {\n    qTechHtml = \"<strong>1.</strong> <em>Mise en situation MLOps :</em> N'ayant pas mentionné MLflow dans vos projets récents, quelle méthode utilisez-vous pour tracker les hyperparamètres et versionner les modèles en production ?<br><br><strong>2.</strong> <em>Architecture & Scalabilité :</em> En l'absence d'expérience sur Kubeflow, quel outil d'orchestration alternatif utilisez-vous pour industrialiser l'entraînement et l'inférence ?\";\n  } else {\n    qTechHtml = \"<strong>1.</strong> <em>Architecture Python :</em> Comment structurez-vous vos tests unitaires et le benchmarking de modèles en Python ?<br><br><strong>2.</strong> <em>Optimisation SQL :</em> Décrivez une stratégie d'optimisation de requête SQL complexe sur une base PostgreSQL à fort volume.\";\n  }\n}\n\nif (!qRHHtml) {\n  qRHHtml = \"<strong>1.</strong> <em>Méthode STAR - Communication COMEX :</em> Décrivez une situation concrète où vous avez dû présenter des résultats data complexes à des membres de direction non techniques.<br><br><strong>2.</strong> <em>Méthode STAR - Résilience en Production :</em> Racontez une expérience où un modèle en production a dévié des attentes métiers. Quelles mesures avez-vous prises ?\";\n}\n\nconst htmlContent = `\n<!DOCTYPE html>\n<html>\n<head>\n<meta charset=\"utf-8\">\n<style>\n  body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #F4F6F9; margin: 0; padding: 20px; }\n  .card { max-width: 680px; margin: 0 auto; background: #FFFFFF; border-radius: 8px; border: 1px solid #E0E0E0; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }\n  .header { background: #0D3B66; color: #FFFFFF; padding: 24px 30px; }\n  .header h1 { margin: 0; font-size: 22px; }\n  .header p { margin: 5px 0 0; opacity: 0.85; font-size: 14px; }\n  .content { padding: 30px; color: #333333; line-height: 1.6; }\n  .badge { display: inline-block; padding: 6px 14px; border-radius: 20px; color: #FFF; font-weight: bold; font-size: 13px; text-transform: uppercase; background: ${badgeColor}; }\n  .section-title { font-size: 16px; font-weight: bold; color: #0D3B66; border-bottom: 2px solid #E2E8F0; padding-bottom: 8px; margin-top: 25px; }\n  .box-questions { background: #EEF4F8; border-left: 4px solid #0D3B66; padding: 14px 18px; margin: 12px 0; border-radius: 0 4px 4px 0; font-size: 14px; line-height: 1.6; color: #1E293B; }\n  .footer { background: #F8FAFC; border-top: 1px solid #E2E8F0; padding: 15px 30px; font-size: 12px; color: #888888; text-align: center; }\n</style>\n</head>\n<body>\n  <div class=\"card\">\n    <div class=\"header\">\n      <h1>📋 Fiche d'Évaluation Décisionnelle</h1>\n      <p>Système Multi-Agents CV Matcher • Rapport officiel du ${date}</p>\n    </div>\n    \n    <div class=\"content\">\n      <div style=\"display: flex; justify-content: space-between; align-items: center;\">\n        <div>\n          <h2 style=\"margin: 0; color: #1D2D44;\">${candidat}</h2>\n          <span style=\"color: #6B7A8F; font-size: 14px;\">Poste visé : <strong>${poste}</strong></span>\n        </div>\n        <div>\n          <span class=\"badge\">${reco}</span>\n        </div>\n      </div>\n\n      <!-- Métriques de Score -->\n      <table width=\"100%\" style=\"margin: 20px 0; border-collapse: separate; border-spacing: 10px 0;\">\n        <tr>\n          <td align=\"center\" style=\"background:${badgeColor}15; border:1px solid ${badgeColor}40; padding:15px; border-radius:6px; width:33%;\">\n            <div style=\"font-size:26px; font-weight:bold; color:${badgeColor};\">${scoreFinal} <span style=\"font-size:14px;\">/100</span></div>\n            <div style=\"font-size:11px; color:${badgeColor}; font-weight:bold; text-transform:uppercase;\">Score Final Pondéré</div>\n          </td>\n          <td align=\"center\" style=\"background:#F8FAFC; border:1px solid #E2E8F0; padding:15px; border-radius:6px; width:33%;\">\n            <div style=\"font-size:22px; font-weight:bold; color:#0D3B66;\">${scoreTech} <span style=\"font-size:14px;\">/50</span></div>\n            <div style=\"font-size:11px; color:#64748B; text-transform:uppercase;\">Score Technique (55%)</div>\n          </td>\n          <td align=\"center\" style=\"background:#F8FAFC; border:1px solid #E2E8F0; padding:15px; border-radius:6px; width:33%;\">\n            <div style=\"font-size:22px; font-weight:bold; color:#0D3B66;\">${scoreRH} <span style=\"font-size:14px;\">/50</span></div>\n            <div style=\"font-size:11px; color:#64748B; text-transform:uppercase;\">Score RH & Stabilité (45%)</div>\n          </td>\n        </tr>\n      </table>\n\n      <!-- Questions Recommandées pour l'Entretien -->\n      <div class=\"section-title\">🎯 Grille de Questions Préparée pour l'Entretien</div>\n      \n      <p style=\"font-size:13px; color:#475569; margin-bottom:5px;\"><strong>Questions Techniques & Spécifiques :</strong></p>\n      <div class=\"box-questions\">${qTechHtml}</div>\n\n      <p style=\"font-size:13px; color:#475569; margin-bottom:5px;\"><strong>Questions Comportementales (Méthode STAR) :</strong></p>\n      <div class=\"box-questions\">${qRHHtml}</div>\n    </div>\n\n    <div class=\"footer\">\n      Dossier d'évaluation transmis au Responsable Recrutement • Données synchronisées avec Google Sheets.\n    </div>\n  </div>\n</body>\n</html>\n`;\n\nreturn [{\n  json: {\n    sujet: `[RH] Évaluation : ${candidat} — Statut : ${reco.toUpperCase()} (${scoreFinal}/100)`,\n    corps_html: htmlContent\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1760,
+        368
+      ],
+      "id": "9c99e6b4-e9f9-4cd9-9561-42c40548cc77",
+      "name": "Générateur Dossier RH"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "📥 Formulaire d'entrée": {
+      "main": [
+        [
+          {
+            "node": "📝 Extraction Texte PDF",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "🗄️ Base Vectorielle (RAM)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📝 Extraction Texte PDF": {
+      "main": [
+        [
+          {
+            "node": "🤝 Agent RH",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Analyze image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📄 Lecteur PDF": {
+      "ai_document": [
+        [
+          {
+            "node": "🗄️ Base Vectorielle (RAM)",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "✂️ Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "📄 Lecteur PDF",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🔢 Embeddings (Insertion)": {
+      "ai_embedding": [
+        [
+          {
+            "node": "🗄️ Base Vectorielle (RAM)",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🧮 Tool: Calculateur Score Tech": {
+      "ai_tool": [
+        [
+          {
+            "node": "💻 Agent Technique",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📚 Tool: Équivalences Tech": {
+      "ai_tool": [
+        [
+          {
+            "node": "💻 Agent Technique",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI (Technique)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "💻 Agent Technique",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📅 Tool: Analyseur Chronologique": {
+      "ai_tool": [
+        [
+          {
+            "node": "🤝 Agent RH",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "💰 Tool: Benchmark Salarial": {
+      "ai_tool": [
+        [
+          {
+            "node": "🤝 Agent RH",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "❓ Tool: Générateur Questions RH (STAR)": {
+      "ai_tool": [
+        [
+          {
+            "node": "🤝 Agent RH",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI (RH)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "🤝 Agent RH",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "💻 Agent Technique": {
+      "main": [
+        [
+          {
+            "node": "🔀 Fusion des Rapports",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🤝 Agent RH": {
+      "main": [
+        [
+          {
+            "node": "🔀 Fusion des Rapports",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "🔀 Fusion des Rapports": {
+      "main": [
+        [
+          {
+            "node": "⚖️ Agent Décision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI (Décision)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "⚖️ Agent Décision",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⚖️ Agent Décision": {
+      "main": [
+        [
+          {
+            "node": "📊 Mise en forme Tableur RH",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📊 Mise en forme Tableur RH": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Générateur Dossier RH",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze image": {
+      "main": [
+        [
+          {
+            "node": "💻 Agent Technique",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "❓ Tool: Générateur Questions Tech": {
+      "ai_tool": [
+        [
+          {
+            "node": "💻 Agent Technique",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "calculateur_decision_finale": {
+      "ai_tool": [
+        [
+          {
+            "node": "⚖️ Agent Décision",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "notificateur_recruteur": {
+      "ai_tool": [
+        [
+          {
+            "node": "⚖️ Agent Décision",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Générateur Dossier RH": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "e28467d3-a94b-4086-9051-fc2db0297451",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "653c6df68b007df7528e68fd154bd759e42ea298fea9b5892ea5a1c068a67bb5"
+  },
+  "nodeGroups": [],
+  "id": "v5Ow8L7WGLvi30ai",
+  "tags": []
+}
